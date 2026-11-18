@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusBazaar | Verified Student-to-Student Marketplace</title>
+  <meta name="description" content="The premier campus marketplace for college students. Buy and sell used textbooks, exchange stationery, trade scientific calculators, and connect directly with campus peers.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container announcement-inner">
+      <div class="announcement-badge"><i class="fa-solid fa-graduation-cap"></i> Semester Exchange Week</div>
+      <p class="announcement-text">
+        <span class="highlight">Over 2,400+ textbooks & calculators listed!</span> Meet verified peers at the campus library & save up to 75%.
+      </p>
+      <div class="announcement-actions">
+        <button id="safety-modal-trigger" class="announcement-link">
+          <i class="fa-solid fa-shield-halved"></i> Campus Safe-Trade Guide
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="navbar-header" id="navbar">
+    <div class="container nav-container">
+      <!-- Logo -->
+      <a href="#" class="brand-logo" aria-label="CampusBazaar Home">
+        <div class="logo-icon-wrapper">
+          <i class="fa-solid fa-book-open-reader"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Campus<span class="logo-accent">Bazaar</span></span>
+          <span class="logo-tag">STUDENT MARKETPLACE</span>
+        </div>
+      </a>
+
+      <!-- Campus Selector Pill -->
+      <div class="campus-picker-pill">
+        <i class="fa-solid fa-location-dot text-primary"></i>
+        <select id="campus-select" aria-label="Select University Campus">
+          <option value="all">📍 All Campuses</option>
+          <option value="main" selected>🏫 Main University Campus</option>
+          <option value="engineering">⚙️ College of Engineering & Tech</option>
+          <option value="medical">🩺 School of Medicine & Health</option>
+          <option value="business">💼 Business School & Economics</option>
+          <option value="north">🌳 North Campus & Hostels</option>
+        </select>
+      </div>
+
+      <!-- Quick Search Bar (Header) -->
+      <div class="header-search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="header-search-input" placeholder="Search calculus books, Casio 991EX, drafting kits, course code..." autocomplete="off">
+        <button id="clear-search-btn" class="clear-search-btn hidden" title="Clear search"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Navigation Actions -->
+      <div class="nav-actions">
+        <!-- Currency Switcher -->
+        <div class="currency-toggle" title="Change currency display">
+          <button class="currency-btn active" data-currency="INR">₹ INR</button>
+          <button class="currency-btn" data-currency="USD">$ USD</button>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <!-- Wishlist Button -->
+        <button id="wishlist-drawer-trigger" class="nav-icon-btn" title="Saved Wishlist" aria-label="Saved Wishlist">
+          <i class="fa-regular fa-heart"></i>
+          <span class="badge-count" id="wishlist-count">0</span>
+        </button>
+
+        <!-- Messages / Inbox Button -->
+        <button id="messages-drawer-trigger" class="nav-icon-btn" title="Chats & Seller Inquiries" aria-label="Seller Chats">
+          <i class="fa-regular fa-comment-dots"></i>
+          <span class="badge-count" id="unread-chats-count">2</span>
+        </button>
+
+        <!-- Post a Listing CTA -->
+        <button id="open-post-modal-btn" class="btn btn-primary post-btn">
+          <i class="fa-solid fa-plus"></i>
+          <span>Sell or Swap</span>
+        </button>
+
+        <!-- Mobile Menu Hamburger -->
+        <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle mobile navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Search Row -->
+    <div class="mobile-search-row container">
+      <div class="mobile-search-input-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="mobile-search-input" placeholder="Search books, calculators, stationery...">
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Banner Section -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-eyebrow">
+            <span class="eyebrow-chip"><i class="fa-solid fa-check-double"></i> 100% Student Verified</span>
+            <span class="eyebrow-text">No middlemen. Zero shipping fees. Campus handoffs.</span>
+          </div>
+          <h1 class="hero-heading">
+            Buy, Sell &amp; Swap <br>
+            <span class="gradient-text">Books, Stationery &amp; Tech</span> <br>
+            Right on Campus.
+          </h1>
+          <p class="hero-description">
+            Cut down textbook costs by up to 80%. Find used scientific calculators, barter drafting tools, trade semester notes, and message verified classmates in minutes.
+          </p>
+
+          <!-- Hero Search & Action Bar -->
+          <div class="hero-search-wrapper">
+            <div class="hero-search-inner">
+              <div class="search-field category-field">
+                <i class="fa-solid fa-layer-group field-icon"></i>
+                <select id="hero-category-filter">
+                  <option value="all">All Categories</option>
+                  <option value="books">📚 Used Textbooks</option>
+                  <option value="stationery">📐 Stationery & Supplies</option>
+                  <option value="calculators">🧮 Old Calculators</option>
+                  <option value="exchange">🔄 Open for Exchange</option>
+                </select>
+              </div>
+              <div class="search-divider"></div>
+              <div class="search-field text-field">
+                <i class="fa-solid fa-magnifying-glass field-icon"></i>
+                <input type="text" id="hero-keyword-input" placeholder="e.g. Stewart Calculus, Casio 991, T-Square, CS102...">
+              </div>
+              <button id="hero-search-submit" class="hero-search-btn">
+                <span>Find Items</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+            
+            <!-- Quick Trend Tags -->
+            <div class="trending-tags">
+              <span class="tags-label"><i class="fa-solid fa-fire text-amber"></i> Popular Searches:</span>
+              <button class="trend-tag" data-tag="Casio fx-991EX">Casio fx-991EX</button>
+              <button class="trend-tag" data-tag="Calculus">Stewart Calculus</button>
+              <button class="trend-tag" data-tag="Rotring">Rotring Pencil</button>
+              <button class="trend-tag" data-tag="Micron">Micron Fineliners</button>
+              <button class="trend-tag" data-tag="Uni-ball">Uni-ball Exam Pens</button>
+              <button class="trend-tag" data-tag="Drafting Scale">Drafting Scale</button>
+              <button class="trend-tag" data-tag="Highlighters">Pastel Highlighters</button>
+              <button class="trend-tag" data-tag="TI-84">TI-84 Plus</button>
+            </div>
+          </div>
+
+          <!-- Hero Trust Metrics -->
+          <div class="hero-stats-row">
+            <div class="stat-item">
+              <span class="stat-number">12,500+</span>
+              <span class="stat-label">Verified Students</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">₹24 Lakhs+</span>
+              <span class="stat-label">Saved by Peers</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">4,800+</span>
+              <span class="stat-label">Books &amp; Tools Rehomed</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">&lt; 10 Mins</span>
+              <span class="stat-label">Average Reply Time</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Feature Showcase Cards -->
+        <div class="hero-visual">
+          <div class="hero-card-stack">
+            <!-- Sample Live Card 1: Books -->
+            <div class="floating-showcase-card card-books" id="hero-sample-book">
+              <div class="card-badge bg-books"><i class="fa-solid fa-book"></i> Used Book • 70% Off</div>
+              <div class="showcase-card-body">
+                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=70" alt="Calculus Textbook" class="showcase-img" width="68" height="68" decoding="async">
+                <div class="showcase-info">
+                  <div class="showcase-course"><i class="fa-solid fa-bookmark"></i> MATH-201 • Semester 3</div>
+                  <h4 class="showcase-title">Calculus: Early Transcendentals (8th Ed)</h4>
+                  <div class="showcase-meta">
+                    <span class="price-val">₹480 <del>₹1,850</del></span>
+                    <span class="condition-badge"><i class="fa-solid fa-sparkles"></i> Like New</span>
+                  </div>
+                  <div class="seller-mini">
+                    <span class="avatar">👨‍🎓</span>
+                    <span class="seller-name">Arjun V. • 3rd Yr Mechanical</span>
+                    <span class="meet-pill"><i class="fa-solid fa-building-columns"></i> Central Library</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sample Live Card 2: Calculator -->
+            <div class="floating-showcase-card card-calc" id="hero-sample-calc">
+              <div class="card-badge bg-calc"><i class="fa-solid fa-calculator"></i> Exam Approved • Scientific</div>
+              <div class="showcase-card-body">
+                <img src="https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=200&q=70" alt="Casio fx-991EX Calculator" class="showcase-img" width="68" height="68" decoding="async">
+                <div class="showcase-info">
+                  <div class="showcase-course"><i class="fa-solid fa-circle-check"></i> High Solar Battery • With Case</div>
+                  <h4 class="showcase-title">Casio fx-991EX ClassWiz (Natural Display)</h4>
+                  <div class="showcase-meta">
+                    <span class="price-val">₹850 <del>₹1,695</del></span>
+                    <span class="condition-badge condition-great">Pristine 10/10</span>
+                  </div>
+                  <div class="seller-mini">
+                    <span class="avatar">👩‍🔬</span>
+                    <span class="seller-name">Rhea S. • 4th Yr Electrical</span>
+                    <span class="meet-pill"><i class="fa-solid fa-mug-hot"></i> Student Union</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sample Live Card 3: Stationery Exchange -->
+            <div class="floating-showcase-card card-exchange" id="hero-sample-stationery">
+              <div class="card-badge bg-exchange"><i class="fa-solid fa-arrow-right-arrow-left"></i> Free Exchange / Barter</div>
+              <div class="showcase-card-body">
+                <img src="https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&w=200&q=70" alt="Drafting Stationery" class="showcase-img" width="68" height="68" decoding="async">
+                <div class="showcase-info">
+                  <div class="showcase-course"><i class="fa-solid fa-arrows-rotate"></i> Barter for Chemistry Lab Kit</div>
+                  <h4 class="showcase-title">Staedtler Complete Drafting Set + T-Square</h4>
+                  <div class="showcase-meta">
+                    <span class="price-val swap-pill">Swap / ₹0</span>
+                    <span class="condition-badge">Gently Used</span>
+                  </div>
+                  <div class="seller-mini">
+                    <span class="avatar">👨‍🎨</span>
+                    <span class="seller-name">Kabir M. • Architecture</span>
+                    <span class="meet-pill"><i class="fa-solid fa-cubes"></i> Studio Block C</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Trust Badge -->
+            <div class="floating-trust-pill">
+              <div class="shield-circle"><i class="fa-solid fa-shield-check"></i></div>
+              <div>
+                <strong>Zero Online Payment Traps</strong>
+                <span>Inspect in person before handoff</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Highlights Section (Books, Stationery, Calculators) -->
+    <section class="category-cards-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag">Core Student Categories</div>
+          <h2 class="section-title">Everything You Need for the Semester</h2>
+          <p class="section-subtitle">Browse dedicated hubs curated specifically for undergraduate &amp; graduate coursework.</p>
+        </div>
+
+        <div class="category-grid">
+          <!-- Hub 1: Used Books -->
+          <div class="cat-card cat-books" data-category="books">
+            <div class="cat-card-header">
+              <div class="cat-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+              <span class="cat-count">1,240+ Books Available</span>
+            </div>
+            <h3 class="cat-title">Buy &amp; Sell Used Books</h3>
+            <p class="cat-desc">
+              Textbooks, previous years' question banks, semester notes, reference guides, and competitive exam books (GATE, GRE, JEE, CAT, USMLE).
+            </p>
+            <ul class="cat-bullet-list">
+              <li><i class="fa-solid fa-circle-check"></i> Filter by Course Code &amp; Semester</li>
+              <li><i class="fa-solid fa-circle-check"></i> Marked or Clean Copy inspection</li>
+              <li><i class="fa-solid fa-circle-check"></i> Original editions at fraction of cost</li>
+            </ul>
+            <div class="cat-card-footer">
+              <button class="cat-action-btn">
+                <span>Browse Textbooks</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hub 2: Exchange Stationery, Pens & Supplies -->
+          <div class="cat-card cat-stationery" data-category="stationery">
+            <div class="cat-card-header">
+              <div class="cat-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+              <span class="cat-count">1,120+ Supplies &amp; Sets</span>
+            </div>
+            <h3 class="cat-title">Stationery, Pens &amp; Lab Gear</h3>
+            <p class="cat-desc">
+              Drafting mechanical pencils, archival micron fineliners, waterproof university exam pens, pastel study highlighters, triangular scales, dissection boxes, and lab notebooks.
+            </p>
+            <ul class="cat-bullet-list">
+              <li><i class="fa-solid fa-circle-check"></i> Rotring, Pentel &amp; Staedtler Drafting Pencils</li>
+              <li><i class="fa-solid fa-circle-check"></i> Waterproof Uni-ball &amp; Pilot G2 Exam Pens</li>
+              <li><i class="fa-solid fa-circle-check"></i> 1-to-1 Barter / Swaps &amp; Junior Freebies</li>
+            </ul>
+            <div class="cat-card-footer">
+              <button class="cat-action-btn">
+                <span>Explore Pens, Pencils &amp; Tools</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hub 3: Old Calculators -->
+          <div class="cat-card cat-calculators" data-category="calculators">
+            <div class="cat-card-header">
+              <div class="cat-icon"><i class="fa-solid fa-calculator"></i></div>
+              <span class="cat-count">340+ Verified Calculators</span>
+            </div>
+            <h3 class="cat-title">Sell &amp; Buy Old Calculators</h3>
+            <p class="cat-desc">
+              Scientific, graphing, and financial calculators. From Casio fx-991EX and fx-82MS to TI-84 Plus CE. Thoroughly tested screens, keys, and fresh batteries.
+            </p>
+            <ul class="cat-bullet-list">
+              <li><i class="fa-solid fa-circle-check"></i> Exam Syllabus Legal (Non-programmable / AP)</li>
+              <li><i class="fa-solid fa-circle-check"></i> Battery &amp; Slide Cover included</li>
+              <li><i class="fa-solid fa-circle-check"></i> Tested display &amp; matrix functions</li>
+            </ul>
+            <div class="cat-card-footer">
+              <button class="cat-action-btn">
+                <span>Find Calculators</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Marketplace Catalog Section -->
+    <section class="marketplace-section" id="marketplace-catalog">
+      <div class="container">
+        <!-- Catalog Navigation & Control Bar -->
+        <div class="catalog-top-controls">
+          <div class="controls-left">
+            <h2 class="catalog-heading">Student Listings</h2>
+            <p class="catalog-sub">Showing <span id="item-count-badge">0</span> active campus listings</p>
+          </div>
+          
+          <div class="controls-right">
+            <!-- Filter Tabs -->
+            <div class="category-tabs" role="tablist">
+              <button class="tab-btn active" data-tab="all" role="tab" aria-selected="true">
+                <i class="fa-solid fa-border-all"></i> All Listings
+              </button>
+              <button class="tab-btn" data-tab="books" role="tab" aria-selected="false">
+                <i class="fa-solid fa-book"></i> Used Books (<span id="books-tab-count">0</span>)
+              </button>
+              <button class="tab-btn" data-tab="stationery" role="tab" aria-selected="false">
+                <i class="fa-solid fa-pen-ruler"></i> Stationery, Pens &amp; Tools (<span id="stationery-tab-count">0</span>)
+              </button>
+              <button class="tab-btn" data-tab="calculators" role="tab" aria-selected="false">
+                <i class="fa-solid fa-calculator"></i> Calculators (<span id="calculators-tab-count">0</span>)
+              </button>
+              <button class="tab-btn" data-tab="exchange" role="tab" aria-selected="false">
+                <i class="fa-solid fa-arrows-rotate"></i> Swap / Exchange (<span id="exchange-tab-count">0</span>)
+              </button>
+              <button class="tab-btn" data-tab="free" role="tab" aria-selected="false">
+                <i class="fa-solid fa-gift"></i> Free Giveaways
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Sub-Bar & Sorting Row -->
+        <div class="filter-subbar">
+          <div class="filter-chips-scroll">
+            <div class="filter-chip-group">
+              <label><i class="fa-solid fa-filter"></i> Condition:</label>
+              <select id="filter-condition" class="filter-select">
+                <option value="all">Any Condition</option>
+                <option value="Like New">Like New (10/10)</option>
+                <option value="Very Good">Very Good (Minimal wear)</option>
+                <option value="Good">Good (Usable with notes)</option>
+                <option value="Fair">Fair / Budget</option>
+              </select>
+            </div>
+
+            <div class="filter-chip-group">
+              <label><i class="fa-solid fa-tag"></i> Deal Type:</label>
+              <select id="filter-deal-type" class="filter-select">
+                <option value="all">All Types</option>
+                <option value="sale">Direct Sale</option>
+                <option value="exchange">Exchange / Swap</option>
+                <option value="free">Free / Senior Donation</option>
+              </select>
+            </div>
+
+            <div class="filter-chip-group">
+              <label><i class="fa-solid fa-building-columns"></i> Major / Dept:</label>
+              <select id="filter-dept" class="filter-select">
+                <option value="all">All Majors</option>
+                <option value="engineering">Engineering &amp; CS</option>
+                <option value="medical">Medical &amp; Life Sciences</option>
+                <option value="business">Business &amp; Finance</option>
+                <option value="architecture">Architecture &amp; Design</option>
+                <option value="general">General Education / Prep</option>
+              </select>
+            </div>
+
+            <div class="filter-chip-group price-filter-group">
+              <label><i class="fa-solid fa-wallet"></i> Max Price: <span id="price-slider-display">₹3,000</span></label>
+              <input type="range" id="price-slider" min="0" max="3000" step="50" value="3000" class="price-range-slider">
+            </div>
+          </div>
+
+          <div class="sort-controls">
+            <label for="sort-select"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort:</label>
+            <select id="sort-select" class="sort-select">
+              <option value="featured">Featured &amp; Recommended</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="newest">Recently Listed</option>
+              <option value="rating">Top Rated Sellers</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Active Filter Indicator Bar -->
+        <div class="active-filters-bar hidden" id="active-filters-bar">
+          <span class="active-label">Active filters:</span>
+          <div class="active-tags-list" id="active-tags-list"></div>
+          <button id="reset-filters-btn" class="reset-filters-btn"><i class="fa-solid fa-rotate-left"></i> Clear All</button>
+        </div>
+
+        <!-- Grid of Listings -->
+        <div class="listings-grid" id="listings-grid">
+          <!-- Dynamically populated via script.js -->
+        </div>
+
+        <!-- Empty State (Shown when no items match) -->
+        <div class="empty-state-card hidden" id="empty-state">
+          <div class="empty-icon"><i class="fa-solid fa-box-open"></i></div>
+          <h3>No matching student items found</h3>
+          <p>Try clearing some filters or searching for broader terms like "Calculus", "Casio", or "Drafting".</p>
+          <div class="empty-actions">
+            <button class="btn btn-secondary" id="empty-reset-btn">Reset All Filters</button>
+            <button class="btn btn-primary" id="empty-post-btn"><i class="fa-solid fa-plus"></i> Post What You Need</button>
+          </div>
+        </div>
+
+        <!-- Pagination / Load More Bar -->
+        <div class="catalog-footer">
+          <div class="verified-guarantee">
+            <i class="fa-solid fa-user-shield text-emerald"></i>
+            <span>All listings are posted by verified students on campus. Zero commission fees.</span>
+          </div>
+          <button class="btn btn-outline" id="load-more-btn">
+            <i class="fa-solid fa-arrows-rotate"></i> Show More Items
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive "How Contacting Sellers Works" Spotlight -->
+    <section class="seller-contact-feature-section">
+      <div class="container">
+        <div class="contact-feature-card">
+          <div class="feature-left">
+            <div class="feature-pill"><i class="fa-solid fa-bolt"></i> Instant Peer Connection</div>
+            <h2 class="feature-title">Contact Student Sellers Seamlessly</h2>
+            <p class="feature-desc">
+              No endless email loops or anonymous classifieds. Message classmates directly, discuss condition, coordinate safe library meetups, or ping them directly via verified WhatsApp.
+            </p>
+
+            <div class="feature-steps-list">
+              <div class="f-step">
+                <div class="f-step-num">1</div>
+                <div class="f-step-text">
+                  <strong>Click "Contact Seller" or "Chat"</strong>
+                  <span>Opens live inquiry drawer with one-tap quick queries &amp; custom offer messages.</span>
+                </div>
+              </div>
+              <div class="f-step">
+                <div class="f-step-num">2</div>
+                <div class="f-step-text">
+                  <strong>Choose Direct Chat or WhatsApp</strong>
+                  <span>Chat in-app or transfer straight to WhatsApp with pre-filled textbook/calculator details.</span>
+                </div>
+              </div>
+              <div class="f-step">
+                <div class="f-step-num">3</div>
+                <div class="f-step-text">
+                  <strong>Meet at Designated Campus Zones</strong>
+                  <span>Meet at the library desk, cafeteria, or dorm lobby. Inspect before payment!</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-cta-row">
+              <button class="btn btn-primary" id="open-demo-chat-btn">
+                <i class="fa-regular fa-comment-dots"></i> Try Live Chat Simulator
+              </button>
+              <button class="btn btn-secondary" id="feature-safety-btn">
+                <i class="fa-solid fa-shield-halved"></i> Safety Checklist
+              </button>
+            </div>
+          </div>
+
+          <!-- Feature Right: Simulated Live Chat Preview Card -->
+          <div class="feature-right">
+            <div class="chat-preview-box">
+              <div class="chat-p-header">
+                <div class="chat-p-user">
+                  <div class="chat-p-avatar">👩‍🎓</div>
+                  <div>
+                    <div class="chat-p-name">Ananya Sharma <span class="badge-verified"><i class="fa-solid fa-circle-check"></i> IIT Delhi ID Verified</span></div>
+                    <div class="chat-p-status"><span class="dot-online"></span> Active 5m ago • Typically replies in 4m</div>
+                  </div>
+                </div>
+                <div class="chat-p-item-ref">
+                  <span class="ref-tag">Casio fx-991EX</span>
+                  <span class="ref-price">₹850</span>
+                </div>
+              </div>
+
+              <div class="chat-p-messages">
+                <div class="chat-bubble bubble-incoming">
+                  <p>Hey! Yes, the Casio fx-991EX ClassWiz is available. I used it for semester 2 engineering exams. It has the original slide cover &amp; fresh solar cell!</p>
+                  <span class="bubble-time">10:42 AM</span>
+                </div>
+                <div class="chat-bubble bubble-outgoing">
+                  <p>Awesome! Can we meet at Central Library 1st Floor reading room around 3:30 PM today?</p>
+                  <span class="bubble-time">10:44 AM</span>
+                </div>
+                <div class="chat-bubble bubble-incoming">
+                  <p>Sounds perfect! I'm wearing a navy hoodie near the reserve counter. You can test all matrix &amp; integration keys before paying. See you there! 🙌</p>
+                  <span class="bubble-time">10:45 AM</span>
+                </div>
+              </div>
+
+              <div class="chat-p-footer">
+                <div class="quick-preset-chips">
+                  <span class="quick-chip">📚 Is this still available?</span>
+                  <span class="quick-chip">📍 Meet at Library</span>
+                  <span class="quick-chip">💰 Will you take ₹750?</span>
+                </div>
+                <div class="chat-p-input-bar">
+                  <input type="text" placeholder="Type a message or proposal..." readonly value="Awesome! See you at 3:30 PM.">
+                  <button class="send-sim-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stationery Exchange & Barter Spotlight Section -->
+    <section class="exchange-spotlight-section">
+      <div class="container">
+        <div class="exchange-banner">
+          <div class="exchange-banner-content">
+            <div class="exchange-pill"><i class="fa-solid fa-arrows-rotate"></i> Barter &amp; Trade-In Zone</div>
+            <h2 class="exchange-banner-title">Have Stationery You Don't Use? Swap It!</h2>
+            <p class="exchange-banner-desc">
+              Architectural mini-drafters, T-Squares, dissection kits, scientific stencils, and leftover highlighters. Post a trade request and swap for what you need next semester — <strong>100% Cashless</strong>.
+            </p>
+            <div class="exchange-examples">
+              <div class="swap-pair">
+                <span class="swap-item"><i class="fa-solid fa-compass-drafting"></i> Engineering Drafting Board</span>
+                <i class="fa-solid fa-arrow-right-arrow-left swap-arrow"></i>
+                <span class="swap-item"><i class="fa-solid fa-dna"></i> Organic Chem Molecular Kit</span>
+              </div>
+              <div class="swap-pair">
+                <span class="swap-item"><i class="fa-solid fa-pen-nib"></i> Rotring Technical Pens</span>
+                <i class="fa-solid fa-arrow-right-arrow-left swap-arrow"></i>
+                <span class="swap-item"><i class="fa-solid fa-calculator"></i> Casio fx-82MS</span>
+              </div>
+            </div>
+          </div>
+          <div class="exchange-banner-actions">
+            <button class="btn btn-white" id="filter-exchange-only-btn">
+              <i class="fa-solid fa-eye"></i> View All Open Swaps
+            </button>
+            <button class="btn btn-trans-white" id="post-exchange-cta-btn">
+              <i class="fa-solid fa-plus"></i> Post a Stationery Swap
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Campus Safe Meetup Zones & Trust Guide -->
+    <section class="safety-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag"><i class="fa-solid fa-shield-heart"></i> Safety First</div>
+          <h2 class="section-title">The Campus Safe-Exchange Protocol</h2>
+          <p class="section-subtitle">How CampusBazaar keeps transactions safe, transparent, and hassle-free.</p>
+        </div>
+
+        <div class="safety-grid">
+          <div class="safety-card">
+            <div class="safety-icon icon-blue"><i class="fa-solid fa-id-badge"></i></div>
+            <h3>Verified Campus IDs</h3>
+            <p>Sellers and buyers display college verification badges. You always know who you are meeting and which department they study in.</p>
+          </div>
+
+          <div class="safety-card">
+            <div class="safety-icon icon-green"><i class="fa-solid fa-landmark"></i></div>
+            <h3>Public Campus Safe Spots</h3>
+            <p>Exchange items only in designated public spots: Central Library Lobby, Student Center, Campus Cafeteria, or Main Gate Security desks.</p>
+          </div>
+
+          <div class="safety-card">
+            <div class="safety-icon icon-amber"><i class="fa-solid fa-magnifying-glass-check"></i></div>
+            <h3>Inspect Before Paying</h3>
+            <p>Flip through book pages to check annotations. Test calculator calculation matrix and keys. Check drafting tools for missing parts.</p>
+          </div>
+
+          <div class="safety-card">
+            <div class="safety-icon icon-purple"><i class="fa-solid fa-comments"></i></div>
+            <h3>Direct Contact Channels</h3>
+            <p>In-app encrypted chat or direct WhatsApp with pre-filled item references. No spam or unmonitored shady links.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Student Testimonials / Recent Swaps -->
+    <section class="community-stories-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag">Campus Stories</div>
+          <h2 class="section-title">Classmates Helping Classmates</h2>
+          <p class="section-subtitle">Real experiences from students who saved money and decluttered their dorms.</p>
+        </div>
+
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="t-stars">⭐⭐⭐⭐⭐</div>
+            <p class="t-text">"I needed a Casio fx-991EX for my Applied Mathematics paper the next morning. Found a senior in Hostel 4 selling his for ₹800. Met at the nescafe booth within 20 mins. Total lifesaver!"</p>
+            <div class="t-author">
+              <span class="t-avatar">👨‍💻</span>
+              <div>
+                <strong>Tanmay Rao</strong>
+                <span>2nd Year Computer Science • Main Campus</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="t-stars">⭐⭐⭐⭐⭐</div>
+            <p class="t-text">"Swapped my First Year Engineering Graphics Mini-Drafter for a second-hand Fundamentals of Physics textbook. Didn't spend a single rupee. Every college needs this!"</p>
+            <div class="t-author">
+              <span class="t-avatar">👩‍🎨</span>
+              <div>
+                <strong>Pooja Deshmukh</strong>
+                <span>3rd Year Civil Engineering • South Campus</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="t-stars">⭐⭐⭐⭐⭐</div>
+            <p class="t-text">"Sold 6 medical textbooks within 48 hours of posting. The buyer and I met right outside the anatomy dissection hall. Instant cash, zero shipping hassles."</p>
+            <div class="t-author">
+              <span class="t-avatar">🩺</span>
+              <div>
+                <strong>Dr. Neil Khosla (Intern)</strong>
+                <span>MBBS Final Year • School of Medicine</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA Banner -->
+    <section class="bottom-cta-section">
+      <div class="container">
+        <div class="bottom-cta-box">
+          <div class="cta-text">
+            <h2>Have books, tools, or calculators you no longer need?</h2>
+            <p>List in 60 seconds. Help a junior student and recover your money today.</p>
+          </div>
+          <div class="cta-actions">
+            <button class="btn btn-primary btn-lg" id="bottom-post-btn">
+              <i class="fa-solid fa-plus-circle"></i> Post Free Listing Now
+            </button>
+            <button class="btn btn-outline-white btn-lg" id="browse-all-cta">
+              <i class="fa-solid fa-compass"></i> Explore All Items
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="brand-logo">
+          <div class="logo-icon-wrapper">
+            <i class="fa-solid fa-book-open-reader"></i>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">Campus<span class="logo-accent">Bazaar</span></span>
+            <span class="logo-tag">STUDENT MARKETPLACE</span>
+          </div>
+        </div>
+        <p class="footer-desc">
+          Empowering college students to save money, reduce campus waste, and build trusting academic communities through peer-to-peer exchanges.
+        </p>
+        <div class="campus-badge-pill">
+          <i class="fa-solid fa-shield-halved text-emerald"></i>
+          <span>Built exclusively for college &amp; university students</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Key Categories</h4>
+        <ul>
+          <li><a href="#" class="footer-cat-link" data-cat="books">Used Textbooks &amp; Notes</a></li>
+          <li><a href="#" class="footer-cat-link" data-cat="calculators">Scientific &amp; Graphing Calculators</a></li>
+          <li><a href="#" class="footer-cat-link" data-cat="stationery">Stationery &amp; Drafting Sets</a></li>
+          <li><a href="#" class="footer-cat-link" data-cat="exchange">Open Barter / Swaps</a></li>
+          <li><a href="#" class="footer-cat-link" data-cat="free">Free Senior Donations</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Student Hubs</h4>
+        <ul>
+          <li><a href="#" id="f-hostels-link">Hostel &amp; Dorm Listings</a></li>
+          <li><a href="#" id="f-library-link">Library Safe Meetup Points</a></li>
+          <li><a href="#" id="f-syllabus-link">Exam Approved Calculator Models</a></li>
+          <li><a href="#" id="f-freshers-link">Freshers Survival Guide</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Safety &amp; Support</h4>
+        <ul>
+          <li><a href="#" id="f-safety-link">Campus Safe-Trade Rules</a></li>
+          <li><a href="#" id="f-id-verify-link">How ID Verification Works</a></li>
+          <li><a href="#" id="f-report-link">Report Inappropriate Listing</a></li>
+          <li><a href="#" id="f-faq-link">Frequently Asked Questions</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2026 CampusBazaar • Peer-to-Peer Student Marketplace. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <span>Student Community Project</span>
+          <span>•</span>
+          <span>Zero Commission</span>
+          <span>•</span>
+          <span>Open Source Friendly</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS & DRAWERS ==================== -->
+
+  <!-- 1. ITEM DETAIL MODAL -->
+  <div class="modal-backdrop hidden" id="item-detail-modal">
+    <div class="modal-dialog modal-lg">
+      <button class="modal-close-btn" id="item-modal-close" aria-label="Close modal"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-body" id="item-modal-body">
+        <!-- Rendered dynamically via renderItemDetailModal() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CONTACT SELLER MODAL / DIRECT CHAT -->
+  <div class="modal-backdrop hidden" id="contact-seller-modal">
+    <div class="modal-dialog modal-md">
+      <button class="modal-close-btn" id="contact-modal-close" aria-label="Close contact modal"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <div class="contact-seller-header">
+          <div class="seller-header-avatar" id="c-seller-avatar">👩‍🎓</div>
+          <div>
+            <h3 id="c-seller-name">Contact Seller</h3>
+            <p id="c-item-title-ref" class="c-item-ref-text">Inquiring about: Calculus Textbook</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-body">
+        <!-- Quick contact channels -->
+        <div class="contact-channels-grid">
+          <a href="#" id="c-whatsapp-btn" target="_blank" class="channel-btn btn-whatsapp">
+            <i class="fa-brands fa-whatsapp"></i>
+            <div>
+              <strong>Chat on WhatsApp</strong>
+              <span>Fastest response • Pre-filled item details</span>
+            </div>
+          </a>
+
+          <button id="c-call-btn" class="channel-btn btn-phone">
+            <i class="fa-solid fa-phone"></i>
+            <div>
+              <strong>Call Student Seller</strong>
+              <span id="c-seller-phone-preview">+91 98765 XXXXX</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="modal-divider"><span>OR CHAT DIRECTLY ON CAMPUSBAZAAR</span></div>
+
+        <!-- In-App Interactive Chat Window -->
+        <div class="inapp-chat-window">
+          <div class="chat-thread" id="c-chat-thread">
+            <!-- Messages populated dynamically -->
+          </div>
+
+          <div class="chat-preset-bar">
+            <span class="preset-title">Quick inquiries:</span>
+            <div class="preset-bubbles" id="preset-bubbles">
+              <button class="preset-btn" data-msg="Hi! Is this still available for campus pickup?">Still available?</button>
+              <button class="preset-btn" data-msg="Can we meet at the Central Library this afternoon?">Meet at Library?</button>
+              <button class="preset-btn" data-msg="Is the price negotiable for fellow branch mates?">Price negotiable?</button>
+              <button class="preset-btn" data-msg="Can I test the keys & display before buying?">Test keys/condition?</button>
+            </div>
+          </div>
+
+          <form id="chat-send-form" class="chat-input-row">
+            <input type="text" id="chat-msg-input" placeholder="Write a message to seller..." autocomplete="off" required>
+            <button type="submit" class="btn btn-primary chat-submit-btn">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- Campus Safety Reminder -->
+        <div class="safety-micro-reminder">
+          <i class="fa-solid fa-shield-halved text-emerald"></i>
+          <span><strong>Safety tip:</strong> Always meet in public campus zones like the library or canteen. Never send money in advance.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. POST A LISTING MODAL -->
+  <div class="modal-backdrop hidden" id="post-listing-modal">
+    <div class="modal-dialog modal-xl">
+      <button class="modal-close-btn" id="post-modal-close" aria-label="Close post modal"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-header">
+        <div class="post-header-icon"><i class="fa-solid fa-plus-circle"></i></div>
+        <div>
+          <h2>List an Item on CampusBazaar</h2>
+          <p>Post used books, stationery, or calculators in under 60 seconds. Free for all students.</p>
+        </div>
+      </div>
+
+      <div class="modal-body post-modal-grid">
+        <!-- Form Left -->
+        <form id="post-item-form" class="post-form">
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="post-title">Listing Title <span class="required">*</span></label>
+              <input type="text" id="post-title" placeholder="e.g. Casio fx-991EX ClassWiz or Stewart Calculus 8th Ed" required>
+            </div>
+            <div class="form-group flex-1">
+              <label for="post-category">Category <span class="required">*</span></label>
+              <select id="post-category" required>
+                <option value="books">📚 Used Books &amp; Notes</option>
+                <option value="stationery">📐 Stationery &amp; Kits</option>
+                <option value="calculators">🧮 Old Calculators</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="post-deal-type">Listing Type <span class="required">*</span></label>
+              <select id="post-deal-type" required>
+                <option value="sale">Direct Sale (Set Price)</option>
+                <option value="exchange">Exchange / Barter Only</option>
+                <option value="free">Free Giveaway (₹0 / $0)</option>
+              </select>
+            </div>
+
+            <div class="form-group flex-1" id="post-price-group">
+              <label for="post-price">Your Price (₹) <span class="required">*</span></label>
+              <input type="number" id="post-price" placeholder="450" min="0" step="10">
+            </div>
+
+            <div class="form-group flex-1" id="post-original-price-group">
+              <label for="post-original-price">Original Retail Price (₹)</label>
+              <input type="number" id="post-original-price" placeholder="1200" min="0" step="10">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="post-condition">Condition <span class="required">*</span></label>
+              <select id="post-condition" required>
+                <option value="Like New">Like New (10/10 - Flawless)</option>
+                <option value="Very Good" selected>Very Good (Minor shelf wear)</option>
+                <option value="Good">Good (Readable / Annotated)</option>
+                <option value="Fair">Fair (Budget friendly)</option>
+              </select>
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="post-course">Course Code / Major</label>
+              <input type="text" id="post-course" placeholder="e.g. MATH101, CS204, Architecture">
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="post-campus">Campus / Preferred Pickup <span class="required">*</span></label>
+              <select id="post-campus" required>
+                <option value="Main Campus Library" selected>Main Campus Library</option>
+                <option value="Student Union / Cafeteria">Student Union / Cafeteria</option>
+                <option value="Engineering Block">Engineering Block</option>
+                <option value="Hostel / Dormitory Lounge">Hostel / Dormitory Lounge</option>
+                <option value="Medical College Gate">Medical College Gate</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="post-description">Item Description &amp; Details <span class="required">*</span></label>
+            <textarea id="post-description" rows="3" placeholder="Mention edition, highlighting, included accessories (slide cover, drafting clips, fresh batteries), or what you'd like in exchange..." required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="post-seller-name">Your Name &amp; Major <span class="required">*</span></label>
+              <input type="text" id="post-seller-name" placeholder="e.g. Rahul S. (3rd Yr CS)" required value="You (Verified Student)">
+            </div>
+            <div class="form-group flex-1">
+              <label for="post-seller-phone">WhatsApp / Phone Number <span class="required">*</span></label>
+              <input type="tel" id="post-seller-phone" placeholder="e.g. +91 9876543210" required value="+91 98765 43210">
+            </div>
+          </div>
+
+          <!-- Image Selection & Upload Area -->
+          <div class="form-group">
+            <label>Item Photo <span class="required">*</span></label>
+            <div class="image-upload-zone" id="image-upload-zone">
+              <input type="file" id="post-image-file" accept="image/*" class="file-input-hidden">
+              <div class="upload-prompt">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p>Click to upload photo or drag &amp; drop here</p>
+                <span>JPG, PNG or WebP up to 5MB</span>
+              </div>
+            </div>
+
+            <!-- Preset Photo Quick Picker -->
+            <div class="preset-photos-picker">
+              <span class="preset-label">Or choose a preset student photo:</span>
+              <div class="preset-photo-chips" id="preset-photo-chips">
+                <button type="button" class="preset-img-btn active" data-img="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=70">📚 Math Textbook</button>
+                <button type="button" class="preset-img-btn" data-img="https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=400&q=70">🧮 Casio Calculator</button>
+                <button type="button" class="preset-img-btn" data-img="https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&w=400&q=70">📐 Drafting Tools</button>
+                <button type="button" class="preset-img-btn" data-img="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&fit=crop&w=400&q=70">✏️ Drafting Pencil</button>
+                <button type="button" class="preset-img-btn" data-img="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=400&q=70">🖊️ Micron / Exam Pens</button>
+                <button type="button" class="preset-img-btn" data-img="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=70">🖍️ Pastel Highlighters</button>
+                <button type="button" class="preset-img-btn" data-img="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=400&q=70">📑 Lab Notebook</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="post-cancel-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="post-submit-btn">
+              <i class="fa-solid fa-rocket"></i> Publish Student Listing
+            </button>
+          </div>
+        </form>
+
+        <!-- Live Preview Card Right -->
+        <div class="post-preview-panel">
+          <div class="preview-header">
+            <h4><i class="fa-solid fa-eye"></i> Live Marketplace Preview</h4>
+            <span class="preview-note">How other students will see this</span>
+          </div>
+
+          <div class="preview-card-wrap" id="live-preview-card">
+            <!-- Dynamic card preview rendered live -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. PROPOSE EXCHANGE / BARTER MODAL -->
+  <div class="modal-backdrop hidden" id="exchange-modal">
+    <div class="modal-dialog modal-md">
+      <button class="modal-close-btn" id="exchange-modal-close" aria-label="Close exchange modal"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-header">
+        <div class="post-header-icon bg-emerald"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+        <div>
+          <h2>Propose a Direct Exchange</h2>
+          <p id="exchange-target-title">Trading for: Staedtler Drafting Set</p>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <form id="exchange-proposal-form">
+          <div class="form-group">
+            <label for="exchange-offer-item">What item are you offering in return? <span class="required">*</span></label>
+            <input type="text" id="exchange-offer-item" placeholder="e.g. Organic Chemistry Molecular Kit or Casio fx-82MS" required>
+          </div>
+
+          <div class="form-group">
+            <label for="exchange-offer-condition">Condition of your offer <span class="required">*</span></label>
+            <select id="exchange-offer-condition" required>
+              <option value="Like New">Like New (Complete with all accessories)</option>
+              <option value="Good" selected>Good Condition (Clean & Functional)</option>
+              <option value="Fair">Fair Condition</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="exchange-proposal-msg">Message to classmate</label>
+            <textarea id="exchange-proposal-msg" rows="3" placeholder="Tell them why this is a fair trade and suggest a convenient campus meetup spot..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="exchange-contact">Your WhatsApp / Mobile</label>
+            <input type="tel" id="exchange-contact" placeholder="+91 98765 43210" required value="+91 98765 43210">
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="exchange-cancel-btn">Cancel</button>
+            <button type="submit" class="btn btn-emerald">
+              <i class="fa-solid fa-paper-plane"></i> Send Barter Offer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SAVED WISHLIST DRAWER -->
+  <div class="drawer-backdrop hidden" id="wishlist-drawer">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <i class="fa-solid fa-heart text-rose"></i>
+          <h3>Saved Wishlist (<span id="drawer-wishlist-count">0</span>)</h3>
+        </div>
+        <button class="drawer-close-btn" id="wishlist-drawer-close" aria-label="Close wishlist"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="drawer-body" id="wishlist-items-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="drawer-footer">
+        <button class="btn btn-secondary btn-block" id="clear-wishlist-btn">Clear All Saved</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. CHATS & INBOX DRAWER -->
+  <div class="drawer-backdrop hidden" id="messages-drawer">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <i class="fa-solid fa-comments text-primary"></i>
+          <h3>Campus Inquiries &amp; Chats</h3>
+        </div>
+        <button class="drawer-close-btn" id="messages-drawer-close" aria-label="Close messages"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="drawer-body" id="inbox-threads-container">
+        <!-- Sample active conversation threads -->
+        <div class="inbox-thread-item" data-chat-id="chat-1">
+          <div class="inbox-avatar">👩‍🎓</div>
+          <div class="inbox-info">
+            <div class="inbox-top">
+              <strong>Ananya S. • Casio fx-991EX</strong>
+              <span class="inbox-time">10:45 AM</span>
+            </div>
+            <p class="inbox-snippet">"Sounds perfect! I'm wearing a navy hoodie near the reserve counter..."</p>
+          </div>
+          <span class="unread-dot"></span>
+        </div>
+
+        <div class="inbox-thread-item" data-chat-id="chat-2">
+          <div class="inbox-avatar">👨‍💻</div>
+          <div class="inbox-info">
+            <div class="inbox-top">
+              <strong>Rohan M. • Stewart Calculus 8th</strong>
+              <span class="inbox-time">Yesterday</span>
+            </div>
+            <p class="inbox-snippet">"Hey! Do you still want the book? I have it in my backpack right now."</p>
+          </div>
+          <span class="unread-dot"></span>
+        </div>
+
+        <div class="inbox-thread-item" data-chat-id="chat-3">
+          <div class="inbox-avatar">🎨</div>
+          <div class="inbox-info">
+            <div class="inbox-top">
+              <strong>Kabir M. • Drafting Kit Barter</strong>
+              <span class="inbox-time">Nov 16</span>
+            </div>
+            <p class="inbox-snippet">"I'd happily swap for the Molecular Kit! Let's meet at Studio Block C."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. CAMPUS SAFETY & MEETUP GUIDE MODAL -->
+  <div class="modal-backdrop hidden" id="safety-modal">
+    <div class="modal-dialog modal-lg">
+      <button class="modal-close-btn" id="safety-modal-close" aria-label="Close safety modal"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-header">
+        <div class="post-header-icon bg-blue"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <h2>Campus Safe-Trade Code of Conduct</h2>
+          <p>Verified guidelines for 100% scam-free exchanges on university grounds.</p>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="safety-guide-points">
+          <div class="sg-point">
+            <div class="sg-icon"><i class="fa-solid fa-sun"></i></div>
+            <div class="sg-content">
+              <h4>1. Daylight &amp; Public Spots Only</h4>
+              <p>Meet in open, well-lit campus spaces with high foot traffic: Central Library Reference Section, Student Union Cafeteria, Departmental Atriums, or outside the Campus Security Office.</p>
+            </div>
+          </div>
+
+          <div class="sg-point">
+            <div class="sg-icon"><i class="fa-solid fa-battery-three-quarters"></i></div>
+            <div class="sg-content">
+              <h4>2. Test Before You Pay</h4>
+              <p>For scientific calculators: turn on the screen, check contrast, run matrix equations, test all buttons, and check battery compartment for leaks. For books: inspect pages for tears or heavy ink markers.</p>
+            </div>
+          </div>
+
+          <div class="sg-point">
+            <div class="sg-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            <div class="sg-content">
+              <h4>3. In-Person Payment Only (UPI / Cash)</h4>
+              <p>Never transfer advance token payments or scan random QR codes sent online. Only scan UPI or hand over cash after physical possession and inspection of the item.</p>
+            </div>
+          </div>
+
+          <div class="sg-point">
+            <div class="sg-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="sg-content">
+              <h4>4. Verify Student Credentials</h4>
+              <p>Feel free to ask for their student ID card or verify their institutional email handle (@edu / @college.edu) for complete peace of mind.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="safety-modal-footer">
+          <button class="btn btn-primary" id="safety-agree-btn">I Understand &amp; Agree</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
